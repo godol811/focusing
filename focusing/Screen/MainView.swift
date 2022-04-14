@@ -8,74 +8,88 @@
 import SwiftUI
 import StoreKit
 import Vision
+import AVFoundation
+
 
 struct MainView: View {
     
     
     //MARK: - FUNCTION
     
-    
+    @ObservedObject private(set) var model: CameraViewModel
     
     
     
     
     
     //MARK: - PROPERTY
-    @StateObject var camera = CameraModel()
+//    @StateObject var camera = CameraModel()
     @StateObject var storeManager = StoreManager()
-    @State private var timeRemaining = 3
+//    @State private var timeRemaining = 3
     @State var optionIndex = 0
     @State private var isTexting = false
     @State private var convertedImage:UIImage?
     
     //별이 없는 경우
     @State private var isZeroStarAlert = false
-    @State private var moveToShop = false
+    
+    @State var cameraRequest : Bool = false
+  
+//    @State var stars = UserDefaults.standard.integer(forKey: AppStorageKeys.stars)
     
     
-    let timer = Timer.publish(every: 1.0, on: .current, in: .common).autoconnect()
-    
-    let productIDs = [ "star10","star20","star50"]
-    @AppStorage("stars") var stars: Int = 7
+    let productIDs = ["star10","star20","star50"]
+
     
     var body: some View {
         
+        
+        
         ZStack{
             
-            if camera.isDetected{
+            if model.isDetected{
                 
-                Image(uiImage: camera.detectedImage!)
+                Image(uiImage: model.detectedImage!)
                     .resizable()
+//                    .frame(minWidth: 0, idealWidth: UIScreen.main.bounds.width, maxWidth: .infinity, minHeight: 0, idealHeight: UIScreen.main.bounds.height, maxHeight: .infinity, alignment: .center)
+//                    .aspectRatio(contentMode: .fill)
+//                    .scaleEffect(0.8)
                     .scaledToFill()
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                     .edgesIgnoringSafeArea(.all)
+//                    .frame(width: UIScreen.main.bounds.width, alignment: .top)
+//                    .background(Color.black)
+                    
                 
                 
                 
-            }
-                CameraPreview(camera: camera)
-//                DetectedCameraPreview()
+            }else{
+                if !model.isZeroStarAlert || !model.cameraNotAuthorized{
+                CameraView(model: model)
+                //                DetectedCameraPreview()
                     .edgesIgnoringSafeArea(.all)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 //                .edgesIgnoringSafeArea(.top)
-                    .opacity(camera.isDetected ? 0 : 1)
+                    .opacity(model.isDetected ? 0 : 1)
                     .onDisappear(perform: {
                         debugPrint("카메라 사라짐")
-                        camera.session.stopRunning()
-                        camera.trackingRequests?.removeAll()
-                        camera.detectionRequests?.removeAll()
+                     
                     })
                     .onAppear(perform:{
                         debugPrint("카메라 나타남")
-                      
+                        
                         
                     })
+              
+                    FaceBoundingBoxView(model: model)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)                    .edgesIgnoringSafeArea(.all)
+                    
+                }
+            }
             
-            //                .opacity(1)
             
             
-            
-            
-            if camera.isProgressing{
+            if model.isProgressing{
                 
                 ProgressView()
                     .scaleEffect(3)
@@ -95,23 +109,23 @@ struct MainView: View {
                 Spacer()
                 ZStack{
                     
-                    if camera.isTimerStart {
+                    if model.isTimerStart {
                         
-                            Text("\(timeRemaining)")
+                        Text("\(model.timeRemaining)")
                                 .modifier(ExtraBold(size: 150))
                                 .foregroundColor(Color("tangerine"))
                                 .frame(width: 100, height: 188, alignment: .center)
-                                .opacity(timeRemaining == 0 ? 0 : 1)
-                                .opacity(timeRemaining == 3 ? 0 : 1)
+                                .opacity(model.timeRemaining == 0 ? 0 : 1)
+                                .opacity(model.timeRemaining == 3 ? 0 : 1)
                         
                         
                     }
                     
                     
-                    if camera.isTaken{
+                    if model.isTaken{
                         HStack{
                             Button(action: {
-                                camera.reTake()
+                                model.reTake()
                                 //초기화
                                 
                             }, label: {
@@ -122,7 +136,7 @@ struct MainView: View {
                             .padding(.leading, 57)
                             Spacer()
                             Button(action: {
-                                camera.requestImage(index: optionIndex)
+                                model.requestImage(index: optionIndex)
                             }, label: {
                                 Image("go")
                                     .resizable()
@@ -139,7 +153,7 @@ struct MainView: View {
                     
                     
                     
-                    if camera.errorDetected{
+                    if model.errorDetected{
                         
                         Text("정상적으로 작동하지 않았습니다 \n두명의 얼굴을 화면 안에 정확히 위치시켜주세요")
                             .modifier(SemiBold(size: 15))
@@ -160,14 +174,14 @@ struct MainView: View {
                     VStack{
                         ZStack{
                             HStack{
-                                NavigationLink(isActive: $moveToShop,
+                                NavigationLink(isActive: $model.moveToShop,
                                                
                                                destination: {
-                                    InAppPurchaseView(camera: camera, storeManager: storeManager)
+                                    InAppPurchaseView(storeManager: storeManager)
                                         .onAppear(perform: {
                                             storeManager.getProducts(productIDs: productIDs)
                                             SKPaymentQueue.default().add(storeManager)
-                                           
+                                            debugPrint( UserDefaults.standard.integer(forKey: AppStorageKeys.stars), "여기" )
                                         })
                                     
                                 }, label: {
@@ -178,7 +192,7 @@ struct MainView: View {
                                                 .resizable()
                                                 .frame(width: 30, height: 30)
                                                 .padding(.leading, 13)
-                                            Text("\(stars)")
+                                            Text("\(UserDefaults.standard.integer(forKey: AppStorageKeys.stars))")
                                                 .modifier(Medium(size: 20))
                                                 .foregroundColor(.white)
                                             Spacer()
@@ -199,9 +213,9 @@ struct MainView: View {
                                 })//
                                 .frame(width: 100)
                                 Spacer()
-                                if camera.checkCompleted{
+                                if model.checkCompleted{
                                     Button(action: {
-                                        camera.reTake()
+                                        model.reTake()
                                     }, label: {
                                         Text("RESET")
                                             .modifier(Heavy(size: 25))
@@ -211,72 +225,63 @@ struct MainView: View {
                                     })
                                 }
                             }
-                            
-                            Button(action:{
-                                //별이 없으면 구매하라고 알림띄움
-                                if stars == 0{
-                                    isZeroStarAlert.toggle()
+                            ShutterButton(isDisabled: model.isDetected, action: {
+                                 
+                                if UserDefaults.standard.integer(forKey: AppStorageKeys.stars) == 0 {
+                                    model.isZeroStarAlert.toggle()
                                 }else{
-                                    camera.isTimerStart.toggle()
-                                    
+                                    model.isTimerStart.toggle()
+                                    debugPrint("타이머 안먹히니")
                                 }
-                            }  , label: {
-                                Image("Capture")
-                                    .resizable()
-                                    .frame(width: 64, height: 64, alignment: .center)
-                                    .padding(.top, 22)
-                                    .opacity(camera.isTaken ? 0.3 : 1)
-                                   
+                                
+                                
+                                
                                 
                             })
-                            .disabled(camera.isDetected)
+                            .opacity(model.isDetected ? 0.3 : 1)
+                            .disabled(model.isDetected)
+                          
+//                            Button(action:{
+//                                //별이 없으면 구매하라고 알림띄움
+//                                if stars == 0{
+//                                    isZeroStarAlert.toggle()
+//                                }else{
+//                                    camera.isTimerStart.toggle()
+//
+//                                }
+//                            }  , label: {
+//                                Image("Capture")
+//                                    .resizable()
+//                                    .frame(width: 64, height: 64, alignment: .center)
+//                                    .padding(.top, 22)
+//                                    .opacity(camera.isTaken ? 0.3 : 1)
+//
+//
+//                            })
+//                            .disabled(camera.isDetected)
                             Spacer()
                         }//:ZSTACK
                         
-                        ScrollOptionView(index: $optionIndex, isProgressing: $camera.isProgressing)
+                        ScrollOptionView(index: $optionIndex, isProgressing: $model.isProgressing)
                         
                     }//: VSTACK
+                
                 }//: ZSTACK
                 .frame(height: 150)
                 
             }//: VSTACK.
         }//: ZSTACK
         .onAppear(perform: {
+            // first checking camerahas got permission...
          
-            camera.Check()
             
             
         })
-        .onDisappear(perform: {
-//            camera.detectionRequests?.removeAll()
-//            camera.trackingRequests?.removeAll()
-//            camera.session.stopRunning()
-            
-        })
-        .alert(isPresented: $camera.alert) {
-            Alert(title: Text("Focusing의 기능을 사용하기 위해 카메라 사용을 요청합니다."))
-        }
-        .alert(isPresented: $isZeroStarAlert){
-          
-            Alert(title: Text("별이 부족합니다."), message: Text("상점으로 이동하시겠습니까?"), primaryButton: .default(Text("취소").foregroundColor(Color.black)), secondaryButton: .default(Text("확인").foregroundColor(Color.black), action: {
-                moveToShop.toggle()
-            }))
-        }
-        .onReceive(timer) { _ in
-            if camera.isTimerStart{
-                if timeRemaining > 0 {
-                    timeRemaining -= 1
-                
-                }else if timeRemaining == 0 {
-                    camera.takePic()
-                    camera.cameraTimerIsZero = true
-                    timeRemaining = 3
-                    camera.isTimerStart.toggle()
-                    
-                }
-                
-            }
-        }
+        
+   
+
+       
+     
         
         
     }

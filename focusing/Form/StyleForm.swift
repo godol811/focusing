@@ -5,6 +5,8 @@
 //  Created by 고종찬 on 2022/03/27.
 //
 import SwiftUI
+import AVFoundation
+
 struct Bold : ViewModifier{
     
     var size = 15
@@ -155,3 +157,39 @@ extension UIImage {
     }
 }
 
+struct ShutterButton: View {
+  let isDisabled: Bool
+    
+    
+  let action: (() -> Void)
+
+  var body: some View {
+    Button(action: {
+      action()
+    }, label: {
+        Image("Capture")
+            .resizable()
+            .frame(width: 64, height: 64, alignment: .center)
+            .padding(.top, 22)
+    })
+      .disabled(isDisabled)
+      .tint(.white)
+  }
+}
+struct AppStorageKeys {
+    static let stars = "stars"
+    
+}
+// Check when the sound setting is on.
+func playSound(file: String , ext: String) -> Void {
+    var audioPlayer = AVAudioPlayer()
+        do{
+            let url = URL.init(fileURLWithPath: Bundle.main.path(forResource: file, ofType: ext) ?? "mp3")
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+        }catch let error{
+            NSLog(error.localizedDescription)
+        }
+    
+}

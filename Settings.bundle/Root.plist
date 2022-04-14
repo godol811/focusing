@@ -4,14 +4,5 @@
 <dict>
 	<key>StringsTable</key>
 	<string>Root</string>
-	<key>PreferenceSpecifiers</key>
-	<array>
-		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>Group</string>
-		</dict>
-	</array>
 </dict>
 </plist>

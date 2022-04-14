@@ -12,16 +12,15 @@ class StoreManager: NSObject, ObservableObject, SKProductsRequestDelegate, SKPay
     @Published var transactionState: SKPaymentTransactionState?
     @Published var isPurchased: Bool = false
     @Published var isLoaded:Bool = false
-    @AppStorage("stars") var stars: Int = 7
+    
+    
     @Published var myProducts = [SKProduct]()
     var request: SKProductsRequest!
     
-    
-    
-    
+   
     // MARK: - FUNCTION
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        isPurchased = false
+       
         for transaction in transactions {
             switch transaction.transactionState {
             case .purchasing:
@@ -31,16 +30,25 @@ class StoreManager: NSObject, ObservableObject, SKProductsRequestDelegate, SKPay
                 debugPrint("아이디",transaction.payment.productIdentifier)
                 switch transaction.payment.productIdentifier{
                 case "star10" :
-                    stars = stars + 10
+                    debugPrint("별 10개",UserDefaults.standard.integer(forKey: AppStorageKeys.stars))
+//
+                    UserDefaults.standard.setValue(UserDefaults.standard.integer(forKey: AppStorageKeys.stars) + 10, forKey: AppStorageKeys.stars)
                 case "star20" :
-                    stars = stars + 20
+                    
+                    debugPrint("별 20개",UserDefaults.standard.integer(forKey: AppStorageKeys.stars))
+//
+                    UserDefaults.standard.setValue(UserDefaults.standard.integer(forKey: AppStorageKeys.stars) + 20, forKey: AppStorageKeys.stars)
                 case "star50" :
-                    stars = stars + 50
+                    
+                    debugPrint("별 50개",UserDefaults.standard.integer(forKey: AppStorageKeys.stars))
+//
+                    UserDefaults.standard.setValue(UserDefaults.standard.integer(forKey: AppStorageKeys.stars) + 50, forKey: AppStorageKeys.stars)
                 default:
                     print("계산안됨")
                 }
-                isPurchased = true
-                
+                isPurchased.toggle()
+               
+                UserDefaults.standard.synchronize()
                 queue.finishTransaction(transaction)
                 transactionState = .purchased
             case .restored:
@@ -80,7 +88,7 @@ class StoreManager: NSObject, ObservableObject, SKProductsRequestDelegate, SKPay
     
     func getProducts(productIDs: [String]) {
         isLoaded = false
-        print("Start requesting products ...")
+        print("Start requesting products ...", UserDefaults.standard.integer(forKey: AppStorageKeys.stars))
         let request = SKProductsRequest(productIdentifiers: Set(productIDs))
         request.delegate = self
         request.start()
