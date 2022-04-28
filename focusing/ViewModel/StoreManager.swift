@@ -4,6 +4,7 @@ import StoreKit
 import SwiftUI
 
 
+
 class StoreManager: NSObject, ObservableObject, SKProductsRequestDelegate, SKPaymentTransactionObserver  {
     
     
@@ -69,21 +70,38 @@ class StoreManager: NSObject, ObservableObject, SKProductsRequestDelegate, SKPay
         print("Did receive response")
         
         if !response.products.isEmpty {
+           
             for fetchedProduct in response.products {
+                
                 DispatchQueue.main.async {
                     self.myProducts.append(fetchedProduct)
+//                    print("내용물들: \(fetchedProduct.productIdentifier)")
+                    self.myProducts.sort(by: {$0.productIdentifier < $1.productIdentifier})
+                  
+                    
+                 
                 }
             }
+          
+            
         }
+       
         
         for invalidIdentifier in response.invalidProductIdentifiers {
             print("Invalid identifiers found: \(invalidIdentifier)")
         }
+        
+        
+        
         DispatchQueue.main.async {
             self.isLoaded = true
-            
+            print("재배열 : \(self.myProducts[0].productIdentifier)")
+            print("재배열 : \(self.myProducts[1].productIdentifier)")
+            print("재배열 : \(self.myProducts[2].productIdentifier)")
         }
     }
+    
+   
     
     
     func getProducts(productIDs: [String]) {

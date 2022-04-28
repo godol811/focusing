@@ -239,7 +239,8 @@ struct InAppPurchaseView: View {
                    
                 }
                 .onDisappear(perform: {
-                    
+                    storeManager.myProducts.removeAll()
+                    print("인앱결제 사라짐")
                 })
                 
                 

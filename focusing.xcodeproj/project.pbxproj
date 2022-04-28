@@ -16,6 +16,7 @@
 		7C57481C27EFF9E30059595C /* BlankView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C57481A27EFF9E30059595C /* BlankView.swift */; };
 		7C57481E27F006C40059595C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C57481D27F006C40059595C /* MainView.swift */; };
 		7C70B19727F7C629007AD136 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7C70B19627F7C629007AD136 /* Settings.bundle */; };
+		7C7EF747280C3060003E1385 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C7EF746280C3060003E1385 /* StoreKit.framework */; };
 		7C8E96C327F5AACA00D9044B /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8E96C227F5AACA00D9044B /* TermsOfUseView.swift */; };
 		7C8E96C527F5AB7A00D9044B /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8E96C427F5AB7A00D9044B /* PrivacyPolicyView.swift */; };
 		7C8E96C727F5AC5700D9044B /* QAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8E96C627F5AC5700D9044B /* QAView.swift */; };
@@ -41,7 +42,6 @@
 		7CB757E327F046D700B2934C /* ScrollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB757E227F046D700B2934C /* ScrollOptionView.swift */; };
 		7CB757E527F0551B00B2934C /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB757E427F0551B00B2934C /* StoreManager.swift */; };
 		7CB757EA27F058D700B2934C /* InAppPurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB757E927F058D700B2934C /* InAppPurchaseView.swift */; };
-		7CB757F227F0784F00B2934C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB757F127F0784F00B2934C /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +55,7 @@
 		7C57481A27EFF9E30059595C /* BlankView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlankView.swift; sourceTree = "<group>"; };
 		7C57481D27F006C40059595C /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		7C70B19627F7C629007AD136 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		7C7EF746280C3060003E1385 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		7C8E96C227F5AACA00D9044B /* TermsOfUseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfUseView.swift; sourceTree = "<group>"; };
 		7C8E96C427F5AB7A00D9044B /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		7C8E96C627F5AC5700D9044B /* QAView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAView.swift; sourceTree = "<group>"; };
@@ -79,7 +80,6 @@
 		7CB757E227F046D700B2934C /* ScrollOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollOptionView.swift; sourceTree = "<group>"; };
 		7CB757E427F0551B00B2934C /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		7CB757E927F058D700B2934C /* InAppPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseView.swift; sourceTree = "<group>"; };
-		7CB757F127F0784F00B2934C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +88,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CB757C027F0189B00B2934C /* Alamofire in Frameworks */,
-				7CB757F227F0784F00B2934C /* StoreKit.framework in Frameworks */,
+				7C7EF747280C3060003E1385 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +219,7 @@
 		7CB757E627F0555800B2934C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7CB757F127F0784F00B2934C /* StoreKit.framework */,
+				7C7EF746280C3060003E1385 /* StoreKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -461,7 +461,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"focusing/Preview Content\"";
-				DEVELOPMENT_TEAM = RC3G596KWT;
+				DEVELOPMENT_TEAM = R3B6HVXRWT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = focusing/Info.plist;
@@ -480,8 +480,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.godol.focusing;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.beimsupictures.focusing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -499,7 +499,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"focusing/Preview Content\"";
-				DEVELOPMENT_TEAM = RC3G596KWT;
+				DEVELOPMENT_TEAM = R3B6HVXRWT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = focusing/Info.plist;
@@ -518,8 +518,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.godol.focusing;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.beimsupictures.focusing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
